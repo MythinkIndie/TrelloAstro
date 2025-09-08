@@ -1,0 +1,38 @@
+---
+import TrelloBoard from "components/TrelloInteractive";
+import MainPage from "components/MainPage";
+import BoardsPage from "components/Boards";
+import { supabase } from "pages/supabase";
+import "styles/global.css";
+
+export const prerender = false;
+
+let lists;
+
+try {
+    
+    let { data: listsData } = await supabase.from("TrelloTable").select("*, TrelloItemCards(id,content,position)").order("position");
+    //let { data: listsData } = await supabase.from("TrelloItemCards").select("*").order("id");
+    lists = listsData!;
+
+} catch (error) {
+
+
+    
+}
+
+---
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <title>Mini Trello en Astro</title>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <MainPage client:load />
+    <!-- <BoardsPage client:load /> -->
+<!--     
+      <TrelloBoard lists={lists} client:load />
+     -->
+  </body>
+</html>

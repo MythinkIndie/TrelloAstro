@@ -1,0 +1,29 @@
+{
+  "name": "todoastro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "devServer": "astro dev --remote",
+    "dev": "astro dev",
+    "start": "astro dev",
+    "trydbpush": "astro db push && astro db execute db/seed.ts --remote",
+    "build": "astro check && astro build --remote",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.3.0",
+    "@astrojs/vercel": "^8.2.7",
+    "@supabase/supabase-js": "^2.56.1",
+    "@tailwindcss/vite": "^4.1.12",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "astro": "^5.13.5",
+    "flowbite": "^3.1.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.8.2",
+    "sortablejs": "^1.15.6",
+    "tailwindcss": "^4.1.12"
+  }
+}
