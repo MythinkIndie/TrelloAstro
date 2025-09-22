@@ -1,5 +1,5 @@
 import React,{ useState, useRef } from "react";
-import CardModal from "./CardModal.tsx";
+import CardModal from "./CardProperties.tsx";
 
 export default function CardOnTable({ card }) {
 
@@ -9,7 +9,7 @@ export default function CardOnTable({ card }) {
 
     return (
         <>
-            <div onClick={() => setOpen(true)} className="task bg-white p-3 rounded-lg shadow cursor-pointer hover:bg-gray-50 transition">
+            <div onClick={() => setOpen(true)} className="task bg-white p-3 my-2 rounded-lg shadow cursor-pointer hover:bg-gray-50 transition">
                 {card.content}
             </div>
 

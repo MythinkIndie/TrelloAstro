@@ -2,6 +2,7 @@ import DotsVerticalIcon from "components/Icons/DotsVerticalIcon.tsx";
 import CardComponent from "./CardComponent.tsx";
 import { useEffect, useState } from "react";
 import CloseIcon from "components/Icons/CloseIcon.tsx";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 
 export default function Table({ list }) {
@@ -10,6 +11,21 @@ export default function Table({ list }) {
     const [createNewCard, setCreateNewCard] = useState(false);
     const [editingTable, setEditingTable] = useState(false);
     const [tables, setTables] = useState([]);
+    const [cardsList, updateCardsList] = useState(list.TrelloItemCards);
+
+    function handleOnDragEnd(result) {
+
+        console.log(result)
+
+        if (!result.destination) return;
+
+        const items = Array.from(cardsList);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+
+
+        updateCardsList(items);
+    }
 
     return (
         <>
@@ -22,28 +38,80 @@ export default function Table({ list }) {
                         </span>
                     </button>
                 </div>
-                <div className="cards space-y-3">
-                    {list.TrelloItemCards?.map(card => (
-                        <CardComponent key={card.id} data-id={card.id} card={card}/>
-                    ))}
-                    <button className="flex items-center justify-between text-gray-700 hover:text-gray-500 rounded-md px-2 py-0.5 mt-auto">
-                        <div className="flex items-center space-x-2">
-                            <span>+ Añade una tarjeta</span>
-                        </div>
-                    </button>
-                </div>
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                        <Droppable droppableId={list.title}> 
+                            {(provided) => (
+                                <span {...provided.droppableProps} ref={provided.innerRef} className="cards">
+                                {list.TrelloItemCards?.map(card => (
+                                    <Draggable key={card.id} draggableId={card.id} index={card.position}>
+                                        {(provided) => (
+                                            <span {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                                                <CardComponent key={card.id} data-id={card.id} card={card}/>
+                                            </span>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                                </span>
+                            )}
+                        </Droppable>
+                        <button className="flex items-center justify-between text-gray-700 hover:text-gray-500 rounded-md px-2 py-0.5 mt-auto">
+                            <div className="flex items-center space-x-2 hover:cursor-pointer">
+                                <span onClick={() => setCreateNewCard(true)}>+ Añade una tarjeta</span>
+                            </div>
+                        </button>
+                </DragDropContext>
             </div>
 
             {editingTable && (
                 <div className="fixed inset-0 z-51 flex items-center justify-center bg-black/40">
                     <div className="bg-white rounded-xl shadow-lg p-6 w-[350px] max-w-full">
 
+                        <div className="flex justify-between items-center border-b pb-2 mb-5">
+                            <span></span>
+                            <h2 className="text-lg font-semibold">Acciones</h2>
+                            <button onClick={() => setEditingTable(false)} className="hover:cursor-pointer">
+                                <CloseIcon/>
+                            </button>
+                        </div>
 
+                        <div className="flex justify-between items-left flex-col border-b border-dashed pb-2 mb-3">
+                            <span>Añadir tarjeta</span>
+                            <span>Copiar lista</span>
+                            <span>Mover lista</span>
+                            <span>Mover todas las tarjetas de esta lista</span>
+                            <span>Ordenar por...</span>
+                            <span>Seguir</span>
+                        </div>
+
+                        <div className="flex justify-between items-left flex-col border-b border-dashed pb-2 mb-3">
+                            <span>TITLE - Cambiar color</span>
+                            <span>Aqui iria una paleta de colores</span>
+                        </div>
+
+                        <div className="flex justify-between items-left flex-col border-b border-dashed pb-2 mb-3">
+                            <span>TITLE - Automatiazción</span>
+                            <span>Cuando se añada una tarjeta a la lista...</span>
+                            <span>Todos los dias, ordenar lista por...</span>
+                        </div>
+
+                        <div className="flex justify-between items-left flex-col mb-1.5">
+                            <span>Archivar esta lista</span>
+                            <span>Archivar todas las tarjetas de esta lista</span>
+                        </div>
+
+                    </div>
+                </div>
+            )}
+
+            {createNewCard && (
+                <div className="fixed inset-0 z-51 flex items-center justify-center bg-black/40">
+                    <div className="bg-white rounded-xl shadow-lg p-6 w-[350px] max-w-full">
 
                         <div className="flex justify-between items-center border-b pb-2 mb-5">
                             <span></span>
                             <h2 className="text-lg font-semibold">Acciones</h2>
-                            <button onClick={() => setEditingTable(false)}>
+                            <button onClick={() => setEditingTable(false)} className="hover:cursor-pointer">
                                 <CloseIcon/>
                             </button>
                         </div>
